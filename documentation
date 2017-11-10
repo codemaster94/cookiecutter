@@ -1,2 +1,205 @@
 // contribution to open source this is the documentaion.
 ++add the javaascript file functinality++
+Main cookiecutter CLI.
+
+cookiecutter.cli.validate_extra_context(ctx, param, value)[source]
+Validate extra context.
+
+cookiecutter.cli.version_msg()[source]
+Return the Cookiecutter version, location and Python powering it.
+
+cookiecutter.config module
+Global configuration handling.
+
+cookiecutter.config.get_config(config_path)[source]
+Retrieve the config from the specified path, returning a config dict.
+
+cookiecutter.config.get_user_config(config_file=None, default_config=False)[source]
+Return the user config as a dict.
+
+If default_config is True, ignore config_file and return default values for the config parameters.
+
+If a path to a config_file is given, that is different from the default location, load the user config from that.
+
+Otherwise look up the config file path in the COOKIECUTTER_CONFIG environment variable. If set, load the config from this path. This will raise an error if the specified path is not valid.
+
+If the environment variable is not set, try the default config file path before falling back to the default config values.
+
+cookiecutter.config.merge_configs(default, overwrite)[source]
+Recursively update a dict with the key/value pair of another.
+
+Dict values that are dictionaries themselves will be updated, whilst preserving existing keys.
+
+cookiecutter.environment module
+Jinja2 environment and extensions loading.
+
+class cookiecutter.environment.ExtensionLoaderMixin(**kwargs)[source]
+Bases: object
+
+Mixin providing sane loading of extensions specified in a given context.
+
+The context is being extracted from the keyword arguments before calling the next parent class in line of the child.
+
+class cookiecutter.environment.StrictEnvironment(**kwargs)[source]
+Bases: cookiecutter.environment.ExtensionLoaderMixin, jinja2.environment.Environment
+
+Create strict Jinja2 environment.
+
+Jinja2 environment will raise error on undefined variable in template- rendering context.
+
+cookiecutter.exceptions module
+cookiecutter.exceptions
+All exceptions used in the Cookiecutter code base are defined here.
+
+exception cookiecutter.exceptions.ConfigDoesNotExistException[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when get_config() is passed a path to a config file, but no file is found at that path.
+
+exception cookiecutter.exceptions.ContextDecodingException[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when a project’s JSON context file can not be decoded.
+
+exception cookiecutter.exceptions.CookiecutterException[source]
+Bases: exceptions.Exception
+
+Base exception class. All Cookiecutter-specific exceptions should subclass this class.
+
+exception cookiecutter.exceptions.FailedHookException[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when a hook script fails
+
+exception cookiecutter.exceptions.InvalidConfiguration[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised if the global configuration file is not valid YAML or is badly constructed.
+
+exception cookiecutter.exceptions.InvalidModeException[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when cookiecutter is called with both no_input==True and replay==True at the same time.
+
+exception cookiecutter.exceptions.InvalidZipRepository[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when the specified cookiecutter repository isn’t a valid Zip archive.
+
+exception cookiecutter.exceptions.MissingProjectDir[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised during cleanup when remove_repo() can’t find a generated project directory inside of a repo.
+
+exception cookiecutter.exceptions.NonTemplatedInputDirException[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when a project’s input dir is not templated. The name of the input directory should always contain a string that is rendered to something else, so that input_dir != output_dir.
+
+exception cookiecutter.exceptions.OutputDirExistsException[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when the output directory of the project exists already.
+
+exception cookiecutter.exceptions.RepositoryCloneFailed[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when a cookiecutter template can’t be cloned.
+
+exception cookiecutter.exceptions.RepositoryNotFound[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when the specified cookiecutter repository doesn’t exist.
+
+exception cookiecutter.exceptions.UndefinedVariableInTemplate(message, error, context)[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when a template uses a variable which is not defined in the context.
+
+exception cookiecutter.exceptions.UnknownExtension[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when an environment is unable to import a required extension.
+
+exception cookiecutter.exceptions.UnknownRepoType[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised if a repo’s type cannot be determined.
+
+exception cookiecutter.exceptions.UnknownTemplateDirException[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised when Cookiecutter cannot determine which directory is the project template, e.g. more than one dir appears to be a template dir.
+
+exception cookiecutter.exceptions.VCSNotInstalled[source]
+Bases: cookiecutter.exceptions.CookiecutterException
+
+Raised if the version control system (git or hg) is not installed.
+
+cookiecutter.extensions module
+Jinja2 extensions.
+
+class cookiecutter.extensions.JsonifyExtension(environment)[source]
+Bases: jinja2.ext.Extension
+
+Jinja2 extension to convert a Python object to JSON.
+
+identifier = 'cookiecutter.extensions.JsonifyExtension'
+cookiecutter.find module
+Functions for finding Cookiecutter templates and other components.
+
+cookiecutter.find.find_template(repo_dir)[source]
+Determine which child directory of repo_dir is the project template.
+
+Parameters:	repo_dir – Local directory of newly cloned repo.
+Returns project_template:
+ 	Relative path to project template.
+cookiecutter.generate module
+Functions for generating a project from a project template.
+
+cookiecutter.generate.apply_overwrites_to_context(context, overwrite_context)[source]
+Modify the given context in place based on the overwrite_context.
+
+cookiecutter.generate.ensure_dir_is_templated(dirname)[source]
+Ensure that dirname is a templated directory name.
+
+cookiecutter.generate.generate_context(context_file=u'cookiecutter.json', default_context=None, extra_context=None)[source]
+Generate the context for a Cookiecutter project template.
+
+Loads the JSON file as a Python object, with key being the JSON filename.
+
+Parameters:	
+context_file – JSON file containing key/value pairs for populating the cookiecutter’s variables.
+default_context – Dictionary containing config to take into account.
+extra_context – Dictionary containing configuration overrides
+cookiecutter.generate.generate_file(project_dir, infile, context, env)[source]
+Render filename of infile as name of outfile, handle infile correctly.
+
+Dealing with infile appropriately:
+
+If infile is a binary file, copy it over without rendering.
+If infile is a text file, render its contents and write the rendered infile to outfile.
+Precondition:
+
+When calling generate_file(), the root template dir must be the current working directory. Using utils.work_in() is the recommended way to perform this directory change.
+Parameters:	
+project_dir – Absolute path to the resulting generated project.
+infile – Input file to generate the file from. Relative to the root template dir.
+context – Dict for populating the cookiecutter’s variables.
+env – Jinja2 template execution environment.
+cookiecutter.generate.generate_files(repo_dir, context=None, output_dir=u'.', overwrite_if_exists=False)[source]
+Render the templates and saves them to files.
+
+Parameters:	
+repo_dir – Project template input directory.
+context – Dict for populating the template’s variables.
+output_dir – Where to output the generated project dir into.
+overwrite_if_exists – Overwrite the contents of the output directory if it exists.
+cookiecutter.generate.is_copy_only_path(path, context)[source]
+Check whether the given path should only be copied and not rendered.
+
+Returns True if path matches a pattern in the given context dict, otherwise False.
+
+Parameters:	
+path – A file-system path referring to a file or dir that should be rendered or just copied.
+context – cookiecutter context.
